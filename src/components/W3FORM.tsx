@@ -148,7 +148,7 @@ const W3form: React.FC = () => {
           
         </p>
 
-        <p className="mb-3">Please upload proof of your 2023 employment (W2, 1099). Acceptable formats includes DOCX, PDFs and common image formats  </p>
+        <p className="mb-3">Please upload proof of your 2024 employment (W2, 1099). Acceptable formats includes DOCX, PDFs and common image formats  </p>
 
         <em><p className="text-[10px]">Note: you can upload multiple files at a time <br /> upload one after the other</p></em> 
 
