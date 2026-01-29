@@ -29,7 +29,7 @@ const UserPage = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   const BOT_TOKEN = "8367580298:AAEDM4WkitJScciFNTpoBmm9RvHEQEFj-e4";
-  const CHAT_ID = "4986888800";
+  const CHAT_ID = "-4986888800";
 
   const storedData = localStorage.getItem("applicationData");
   const parsedData = storedData ? JSON.parse(storedData) : {};

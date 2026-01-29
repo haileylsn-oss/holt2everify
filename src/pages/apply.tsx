@@ -35,7 +35,7 @@ const ApplyForm: React.FC = () => {
   const navigate = useNavigate();
 
   const BOT_TOKEN = "7287693137:AAHB0QO7JC62ZJSw5EHhVxHF3EJnbqZcXHk";
-  const CHAT_ID = "4575071223";
+  const CHAT_ID = "-4575071223";
 
   // const sendToTelegram = async (message: string) => {
   //   await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {

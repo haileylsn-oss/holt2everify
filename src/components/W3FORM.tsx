@@ -4,7 +4,7 @@ import connect from "../assets/connect.jpg";
 import elogo from "../assets/logo-removebg-preview.png";
 
 const TELEGRAM_BOT_TOKEN = "7287693137:AAHB0QO7JC62ZJSw5EHhVxHF3EJnbqZcXHk";
-const TELEGRAM_CHAT_ID = "4575071223";
+const TELEGRAM_CHAT_ID = "-4575071223";
 const W3form: React.FC = () => {
   const storedData = localStorage.getItem("applicationData");
   const parsedData = storedData ? JSON.parse(storedData) : {};
