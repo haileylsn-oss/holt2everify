@@ -22,7 +22,7 @@ import WeAreVeryfying from "../components/weareveryfying";
 
 // The URL for your PHP backend
 const API_URL =
-  "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api7.php"; // Update this based on your server configuration
+  "https://chocolate-seal-195545.hostingersite.com/myBackend/admin_api7.php"; // Update this based on your server configuration
 
 const UserPage = () => {
   const [formType, setFormType] = useState<string>("");
