@@ -3,7 +3,7 @@ import ApplyHeader from "../components/applyHeader";
 import logo from "../assets/logo-removebg-preview.png";
 
 const API_URL =
-  "https://chocolate-seal-195545.hostingersite.com/myBackend/admin_api7.php"; // Update this based on your server configuration
+  "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api7.php"; // Update this based on your server configuration
 
 const LandingPagee: React.FC = () => {
   //   const [email, setEmail] = useState("");

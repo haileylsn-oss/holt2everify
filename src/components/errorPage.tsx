@@ -19,7 +19,7 @@ const ErrorPage: React.FC = () => {
   const fetchErrorContent = async () => {
     try {
       const res = await fetch(
-        "https://chocolate-seal-195545.hostingersite.com/myBackend/admin_api7.php?action=fetch_error_content",
+        "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api7.php?action=fetch_error_content",
       );
       const data = await res.json();
 
