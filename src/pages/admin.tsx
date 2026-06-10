@@ -3,7 +3,7 @@ import ImageTable from "../components/adminExplanation";
 
 // Replace JSONBin variables with appropriate backend URLs
 const API_URL =
-  "https://ivory-dunlin-618889.hostingersite.com/myBackend/admin_api7.php"; // Adjust this if needed
+  "https://olive-tapir-759483.hostingersite.com/myBackend/admin_api7.php"; // Adjust this if needed
 
 const AdminPage = () => {
   const [formList, setFormList] = useState<string[]>([]);
